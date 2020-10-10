@@ -33,15 +33,12 @@ export default function App() {
 
   const getNews = async () => {
     if (lastPageReached) return;
-    console.log("getNews");
     try {
       const response = await fetch(
         `https://newsapi.org/v2/top-headlines?country=us&apiKey=cd15ae0f8d4d43c6a8c3e1d400c99ea8&page=${pageNumber}`
       );
       const jsonData = await response.json();
       const hasMoreArticles = jsonData.articles.length > 0;
-      // console.log(jsonData.articles.length);
-      // console.log(articles.length);
       if (hasMoreArticles) {
         const newArticleList = filterForUniqueArticles(
           articles.concat(jsonData.articles)
@@ -79,7 +76,7 @@ export default function App() {
 
   const renderArticleItem = ({ item }) => {
     return (
-      <Card>
+      <Card containerStyle={[styles.cardContainer, styles.shadowStyle]}>
         <Card.Title>{item.title}</Card.Title>
         <Card.Image
           source={{ uri: item.urlToImage }}
@@ -99,6 +96,7 @@ export default function App() {
           title="Read more"
           backgroundColor="#03A9F4"
           onPress={() => onPress(item.url)}
+          buttonStyle={{ borderRadius: 10 }}
         />
       </Card>
     );
@@ -115,7 +113,7 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <View style={styles.row}>
         <Text style={styles.label}>Articles Count:</Text>
         <Text style={styles.info}>{articles.length}</Text>
@@ -147,10 +145,14 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    marginTop: 20,
+    marginTop: 40,
     alignItems: "center",
     backgroundColor: "#fff",
     justifyContent: "center",
+  },
+
+  cardContainer: {
+    borderRadius: 10,
   },
 
   row: {
@@ -174,5 +176,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: "center",
     padding: 20,
+  },
+
+  shadowStyle: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
